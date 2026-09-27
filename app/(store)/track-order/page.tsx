@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ const LABELS: Record<(typeof TIMELINE)[number], string> = {
   DELIVERED: "Delivered",
 };
 
-export default function TrackOrderPage() {
+function TrackOrderForm() {
   const searchParams = useSearchParams();
   const [orderNumber, setOrderNumber] = useState(searchParams.get("order") ?? "");
   const [phone, setPhone] = useState("");
@@ -83,5 +83,13 @@ export default function TrackOrderPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function TrackOrderPage() {
+  return (
+    <Suspense fallback={null}>
+      <TrackOrderForm />
+    </Suspense>
   );
 }
