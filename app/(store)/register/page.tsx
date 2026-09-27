@@ -16,12 +16,17 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    const result = await registerCustomer(form);
-    setLoading(false);
-    if (result.success) {
-      router.push("/account");
-    } else {
-      setError(result.error ?? "Something went wrong.");
+    try {
+      const result = await registerCustomer(form);
+      if (result.success) {
+        router.push("/account");
+      } else {
+        setError(result.error ?? "Something went wrong.");
+      }
+    } catch {
+      setError("Something went wrong. Please try again in a moment.");
+    } finally {
+      setLoading(false);
     }
   }
 

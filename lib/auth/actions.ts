@@ -30,23 +30,28 @@ export async function registerCustomer(input: unknown): Promise<AuthResult> {
   const limit = rateLimit(`register:${parsed.data.email.toLowerCase()}`, 5, 60 * 60);
   if (!limit.allowed) return { success: false, error: "Too many attempts. Please try again later." };
 
-  const existing = await prisma.user.findUnique({ where: { email: parsed.data.email } });
-  if (existing) return { success: false, error: "An account with this email already exists." };
+  try {
+    const existing = await prisma.user.findUnique({ where: { email: parsed.data.email } });
+    if (existing) return { success: false, error: "An account with this email already exists." };
 
-  const passwordHash = await hashPassword(parsed.data.password);
-  const user = await prisma.user.create({
-    data: {
-      email: parsed.data.email,
-      passwordHash,
-      name: parsed.data.name,
-      phone: parsed.data.phone,
-      role: "CUSTOMER",
-      customer: { create: {} },
-    },
-  });
+    const passwordHash = await hashPassword(parsed.data.password);
+    const user = await prisma.user.create({
+      data: {
+        email: parsed.data.email,
+        passwordHash,
+        name: parsed.data.name,
+        phone: parsed.data.phone,
+        role: "CUSTOMER",
+        customer: { create: {} },
+      },
+    });
 
-  await createSession({ userId: user.id, role: user.role, email: user.email });
-  return { success: true };
+    await createSession({ userId: user.id, role: user.role, email: user.email });
+    return { success: true };
+  } catch (err) {
+    console.error("registerCustomer failed:", err);
+    return { success: false, error: "Something went wrong. Please try again in a moment." };
+  }
 }
 
 export async function loginUser(input: unknown): Promise<AuthResult> {
@@ -56,18 +61,27 @@ export async function loginUser(input: unknown): Promise<AuthResult> {
   const limit = rateLimit(`login:${parsed.data.email.toLowerCase()}`, 8, 15 * 60);
   if (!limit.allowed) return { success: false, error: "Too many attempts. Please try again in a few minutes." };
 
-  const user = await prisma.user.findUnique({ where: { email: parsed.data.email } });
-  // Same generic error whether the email doesn't exist or the password is wrong —
-  // never reveal which, to avoid leaking which emails are registered.
-  if (!user || !user.isActive) return { success: false, error: "Invalid email or password." };
+  try {
+    const user = await prisma.user.findUnique({ where: { email: parsed.data.email } });
+    // Same generic error whether the email doesn't exist or the password is wrong —
+    // never reveal which, to avoid leaking which emails are registered.
+    if (!user || !user.isActive) return { success: false, error: "Invalid email or password." };
 
-  const valid = await verifyPassword(parsed.data.password, user.passwordHash);
-  if (!valid) return { success: false, error: "Invalid email or password." };
+    const valid = await verifyPassword(parsed.data.password, user.passwordHash);
+    if (!valid) return { success: false, error: "Invalid email or password." };
 
-  await createSession({ userId: user.id, role: user.role, email: user.email });
-  return { success: true };
+    await createSession({ userId: user.id, role: user.role, email: user.email });
+    return { success: true };
+  } catch (err) {
+    console.error("loginUser failed:", err);
+    return { success: false, error: "Something went wrong. Please try again in a moment." };
+  }
 }
 
 export async function logoutUser() {
-  await clearSession();
+  try {
+    await clearSession();
+  } catch (err) {
+    console.error("logoutUser failed:", err);
+  }
 }

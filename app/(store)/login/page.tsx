@@ -18,12 +18,17 @@ function LoginForm() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    const result = await loginUser({ email, password });
-    setLoading(false);
-    if (result.success) {
-      router.push(searchParams.get("redirect") ?? "/account");
-    } else {
-      setError(result.error ?? "Something went wrong.");
+    try {
+      const result = await loginUser({ email, password });
+      if (result.success) {
+        router.push(searchParams.get("redirect") ?? "/account");
+      } else {
+        setError(result.error ?? "Something went wrong.");
+      }
+    } catch {
+      setError("Something went wrong. Please try again in a moment.");
+    } finally {
+      setLoading(false);
     }
   }
 

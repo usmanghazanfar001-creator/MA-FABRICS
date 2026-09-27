@@ -25,19 +25,24 @@ export function CheckoutView({ shippingFee }: { shippingFee: number }) {
   async function handlePlaceOrder() {
     setSubmitting(true);
     setError(null);
-    const result = await createOrder({
-      customer,
-      shipping,
-      paymentMethod,
-      items: items.map((i) => ({ productId: i.productId, color: i.color, quantity: i.quantity })),
-    });
-    setSubmitting(false);
+    try {
+      const result = await createOrder({
+        customer,
+        shipping,
+        paymentMethod,
+        items: items.map((i) => ({ productId: i.productId, color: i.color, quantity: i.quantity })),
+      });
 
-    if (result.success && result.orderNumber) {
-      clear();
-      router.push(`/order-success?order=${result.orderNumber}`);
-    } else {
-      setError(result.error ?? "Something went wrong placing your order.");
+      if (result.success && result.orderNumber) {
+        clear();
+        router.push(`/order-success?order=${result.orderNumber}`);
+      } else {
+        setError(result.error ?? "Something went wrong placing your order.");
+      }
+    } catch {
+      setError("Something went wrong placing your order. Please try again in a moment.");
+    } finally {
+      setSubmitting(false);
     }
   }
 
