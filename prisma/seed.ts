@@ -86,7 +86,23 @@ async function main() {
   );
 
   // --- Demo products (fictional; clearly seed data) ---
-  const products = [
+  const products: {
+    name: string;
+    slug: string;
+    sku: string;
+    description: string;
+    shortDescription: string;
+    price: number;
+    compareAtPrice?: number;
+    fabricType: string;
+    texture: string;
+    season: Season;
+    recommendedUse: string;
+    isFeatured?: boolean;
+    isNewArrival?: boolean;
+    stock: number;
+    imageUrl?: string;
+  }[] = [
     {
       name: "MA Hawal Suiting",
       slug: "ma-hawal-suiting",
