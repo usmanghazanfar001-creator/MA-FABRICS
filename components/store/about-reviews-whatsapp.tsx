@@ -1,12 +1,13 @@
 import Image from "next/image";
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { IMAGES } from "@/lib/media";
 
 export function AboutSection() {
   return (
     <section className="mx-auto grid max-w-7xl gap-10 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-10 lg:py-28">
       <div className="relative aspect-[4/5] overflow-hidden">
-        <Image src="/placeholder-about.jpg" alt="MA Fabrics workshop" fill className="object-cover" sizes="(min-width: 1024px) 50vw, 100vw" />
+        <Image src={IMAGES.boutique} alt="MA Fabrics workshop" fill className="object-cover" sizes="(min-width: 1024px) 50vw, 100vw" />
       </div>
       <div className="flex flex-col justify-center">
         <h2 className="font-display text-3xl text-navy sm:text-4xl">About MA</h2>

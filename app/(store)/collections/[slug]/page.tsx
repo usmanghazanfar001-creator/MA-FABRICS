@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { ProductCard, type ProductCardData } from "@/components/product/product-card";
+import { resolveImage, realImage, collectionImage } from "@/lib/media";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -34,8 +35,8 @@ export default async function CollectionDetailPage({ params }: { params: Promise
     category: p.category?.name ?? "",
     price: Number(p.price),
     compareAtPrice: p.compareAtPrice ? Number(p.compareAtPrice) : null,
-    imageUrl: p.images[0]?.url ?? "/placeholder-fabric.jpg",
-    hoverImageUrl: p.images[1]?.url,
+    imageUrl: resolveImage(p.images[0]?.url),
+    hoverImageUrl: realImage(p.images[1]?.url),
     colors: p.colors.map((pc) => ({ name: pc.color.name, hex: pc.color.hex })),
     inStock: (p.inventory?.stockMeters ?? 0) > 0,
   }));
@@ -44,7 +45,7 @@ export default async function CollectionDetailPage({ params }: { params: Promise
     <div>
       <div className="relative flex h-64 items-end overflow-hidden bg-navy sm:h-80">
         <Image
-          src={collection.imageUrl || "/placeholder-suiting.jpg"}
+          src={collectionImage(collection.slug, collection.imageUrl)}
           alt={collection.name}
           fill
           className="object-cover opacity-60"

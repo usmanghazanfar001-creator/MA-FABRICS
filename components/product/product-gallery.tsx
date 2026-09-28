@@ -2,10 +2,12 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { FALLBACK_PRODUCT_IMAGE, isPlaceholderUrl } from "@/lib/media";
 
 export function ProductGallery({ images, name }: { images: { url: string; alt: string | null }[]; name: string }) {
   const [active, setActive] = useState(0);
-  const gallery = images.length > 0 ? images : [{ url: "/placeholder-fabric.jpg", alt: name }];
+  const real = images.filter((img) => !isPlaceholderUrl(img.url));
+  const gallery = real.length > 0 ? real : [{ url: FALLBACK_PRODUCT_IMAGE, alt: name }];
 
   return (
     <div className="flex flex-col-reverse gap-4 sm:flex-row">
@@ -24,7 +26,7 @@ export function ProductGallery({ images, name }: { images: { url: string; alt: s
       </div>
       <div className="relative aspect-[3/4] flex-1 overflow-hidden bg-cream">
         <Image
-          src={gallery[active]?.url ?? "/placeholder-fabric.jpg"}
+          src={gallery[active]?.url ?? FALLBACK_PRODUCT_IMAGE}
           alt={gallery[active]?.alt ?? name}
           fill
           priority

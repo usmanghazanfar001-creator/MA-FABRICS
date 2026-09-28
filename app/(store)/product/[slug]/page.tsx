@@ -7,6 +7,7 @@ import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductActions } from "@/components/product/product-actions";
 import { VideoPlayer } from "@/components/product/video-player";
 import { ProductCard, type ProductCardData } from "@/components/product/product-card";
+import { resolveImage, realImage } from "@/lib/media";
 
 async function getWhatsAppNumber() {
   const setting = await prisma.siteSetting.findUnique({ where: { key: "whatsapp_number" } });
@@ -17,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) return {};
-  const firstImage = product.images[0];
+  const firstImage = product.images.find((img) => realImage(img.url));
   return {
     title: product.name,
     description: product.shortDescription ?? product.description.slice(0, 155),
@@ -100,7 +101,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               productSlug={product.slug}
               productName={product.name}
               sku={product.sku}
-              imageUrl={product.images[0]?.url ?? "/placeholder-fabric.jpg"}
+              imageUrl={resolveImage(product.images[0]?.url)}
               price={Number(product.price)}
               colors={product.colors.map((pc) => ({ name: pc.color.name, hex: pc.color.hex }))}
               stockMeters={product.inventory?.stockMeters ?? 0}
@@ -148,7 +149,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 name: p.name,
                 category: product.category?.name ?? "",
                 price: Number(p.price),
-                imageUrl: p.images[0]?.url ?? "/placeholder-fabric.jpg",
+                imageUrl: resolveImage(p.images[0]?.url),
                 colors: p.colors.map((pc) => ({ name: pc.color.name, hex: pc.color.hex })),
                 inStock: true,
               };

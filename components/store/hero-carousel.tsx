@@ -6,9 +6,11 @@ import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { HERO_VIDEOS } from "@/lib/media";
 
 interface Slide {
-  image: string;
+  video: string;
+  poster: string;
   eyebrow: string;
   heading: string;
   text: string;
@@ -16,14 +18,15 @@ interface Slide {
   primaryLabel: string;
 }
 
-const AUTO_ADVANCE_MS = 6000;
+const AUTO_ADVANCE_MS = 7000;
 
 export function HeroCarousel({ heading, text }: { heading?: string; text?: string }) {
   const reduceMotion = useReducedMotion();
 
   const slides: Slide[] = [
     {
-      image: "/placeholder-hero-fabric.jpg",
+      video: HERO_VIDEOS.fabricTouch.src,
+      poster: HERO_VIDEOS.fabricTouch.poster,
       eyebrow: "New season",
       heading: heading ?? "Crafted for\ndistinction",
       text: text ?? "Discover premium fabrics designed for refined style, comfort and lasting quality.",
@@ -31,20 +34,13 @@ export function HeroCarousel({ heading, text }: { heading?: string; text?: strin
       primaryLabel: "Explore collection",
     },
     {
-      image: "/placeholder-suiting.jpg",
-      eyebrow: "Premium suiting",
-      heading: "Tailored for\nevery occasion",
-      text: "Formal suiting fabric in 10 shades, cut and shipped across Pakistan.",
-      primaryHref: "/shop?category=suiting",
-      primaryLabel: "Shop suiting",
-    },
-    {
-      image: "/placeholder-winter.jpg",
-      eyebrow: "Winter collection",
-      heading: "Weight and warmth,\nwithout the bulk",
-      text: "Heavier weaves built for the cold season, still light enough to tailor cleanly.",
-      primaryHref: "/collections/winter-collection",
-      primaryLabel: "Shop winter",
+      video: HERO_VIDEOS.velvetSwatches.src,
+      poster: HERO_VIDEOS.velvetSwatches.poster,
+      eyebrow: "Fabric first",
+      heading: "Texture you can\nfeel",
+      text: "Smooth, durable fabrics selected for comfort and a clean drape.",
+      primaryHref: "/shop",
+      primaryLabel: "Shop fabrics",
     },
   ];
 
@@ -62,6 +58,7 @@ export function HeroCarousel({ heading, text }: { heading?: string; text?: strin
 
   const slide = slides[index];
   if (!slide) return null;
+  const headingLines = slide.heading.split("\n");
 
   return (
     <section
@@ -72,16 +69,33 @@ export function HeroCarousel({ heading, text }: { heading?: string; text?: strin
       <AnimatePresence mode="wait">
         <motion.div
           key={index}
-          initial={reduceMotion ? { opacity: 1 } : { opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
+          animate={{ opacity: 1 }}
           exit={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
           className="absolute inset-0"
         >
-          <Image src={slide.image} alt={slide.heading.replace("\n", " ")} fill priority className="object-cover opacity-70" sizes="100vw" />
+          {reduceMotion ? (
+            <Image src={slide.poster} alt="" fill priority className="object-cover opacity-70" sizes="100vw" />
+          ) : (
+            // Decorative background clip: muted + looping + inline so it autoplays on every browser.
+            <video
+              key={slide.video}
+              src={slide.video}
+              poster={slide.poster}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-hidden="true"
+              className="h-full w-full object-cover opacity-70"
+            />
+          )}
         </motion.div>
       </AnimatePresence>
-      <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/20 to-transparent" />
+      <div className="absolute inset-0 bg-navy/25" />
+      <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent" />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 sm:pb-20 lg:px-10">
         <AnimatePresence mode="wait">
@@ -95,10 +109,10 @@ export function HeroCarousel({ heading, text }: { heading?: string; text?: strin
           >
             <p className="mb-3 text-xs uppercase tracking-luxe text-gold">{slide.eyebrow}</p>
             <h1 className="font-display text-5xl leading-[1.05] text-cream sm:text-6xl lg:text-7xl">
-              {slide.heading.split("\n").map((line, i) => (
+              {headingLines.map((line, i) => (
                 <span key={i}>
                   {line}
-                  {i < slide.heading.split("\n").length - 1 && <br />}
+                  {i < headingLines.length - 1 && <br />}
                 </span>
               ))}
             </h1>

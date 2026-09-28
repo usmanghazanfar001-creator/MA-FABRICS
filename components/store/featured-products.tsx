@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db/prisma";
 import { ProductCard, type ProductCardData } from "@/components/product/product-card";
+import { resolveImage, realImage } from "@/lib/media";
 
 export async function FeaturedProducts() {
   const products = await prisma.product.findMany({
@@ -17,8 +18,8 @@ export async function FeaturedProducts() {
     category: p.category?.name ?? "",
     price: Number(p.price),
     compareAtPrice: p.compareAtPrice ? Number(p.compareAtPrice) : null,
-    imageUrl: p.images[0]?.url ?? "/placeholder-fabric.jpg",
-    hoverImageUrl: p.images[1]?.url,
+    imageUrl: resolveImage(p.images[0]?.url),
+    hoverImageUrl: realImage(p.images[1]?.url),
     colors: p.colors.map((pc) => ({ name: pc.color.name, hex: pc.color.hex })),
     inStock: (p.inventory?.stockMeters ?? 0) > 0,
   }));

@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { PrismaClient, Season, VideoType } from "@prisma/client";
+import { PrismaClient, Season } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -163,21 +163,11 @@ async function main() {
         categoryId: categories[0]!.id,
         collectionId: collections[0]!.id,
         images: {
-          create: [{ url: imageUrl ?? "/placeholder-fabric.jpg", alt: p.name, position: 0 }],
+          create: [{ url: imageUrl ?? "/media/images/neutral-rack.jpg", alt: p.name, position: 0 }],
         },
         colors: {
           // MA Hawal Suiting ships in all 10 colors per the flyer; others get a 6-color sample.
           create: (p.slug === "ma-hawal-suiting" ? colors : colors.slice(0, 6)).map((c) => ({ colorId: c.id })),
-        },
-        videos: {
-          create: [
-            {
-              title: `${p.name} — Fabric Showcase`,
-              url: "/placeholder-video.mp4",
-              type: VideoType.FABRIC_TEXTURE,
-              isPublished: true,
-            },
-          ],
         },
       },
     });

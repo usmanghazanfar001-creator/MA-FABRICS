@@ -59,7 +59,7 @@ export async function SiteFooter() {
               rel="noopener noreferrer"
               className="text-gold hover:underline"
             >
-              Noviqoagency
+              NOVIQO
             </a>
           </p>
         </div>

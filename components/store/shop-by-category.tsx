@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db/prisma";
 import { ShopByCategoryGrid } from "@/components/store/shop-by-category-grid";
+import { categoryImage } from "@/lib/media";
 
 export async function ShopByCategory() {
   const categories = await prisma.category.findMany({
@@ -15,7 +16,7 @@ export async function ShopByCategory() {
       <div className="mx-auto max-w-7xl">
         <h2 className="mb-12 font-display text-3xl sm:text-4xl">Shop by category</h2>
         <ShopByCategoryGrid
-          categories={categories.map((c) => ({ slug: c.slug, name: c.name, imageUrl: c.imageUrl }))}
+          categories={categories.map((c, i) => ({ slug: c.slug, name: c.name, imageUrl: categoryImage(c.slug, c.imageUrl, i) }))}
         />
       </div>
     </section>

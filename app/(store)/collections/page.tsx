@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/db/prisma";
+import { collectionImage } from "@/lib/media";
 
 export const metadata: Metadata = {
   title: "Collections",
@@ -26,10 +27,10 @@ export default async function CollectionsPage() {
         <p className="text-sm text-navy/60">No collections available yet.</p>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {collections.map((c) => (
+          {collections.map((c, i) => (
             <Link key={c.slug} href={`/collections/${c.slug}`} className="group relative aspect-[4/3] overflow-hidden bg-cream">
               <Image
-                src={c.imageUrl || "/placeholder-suiting.jpg"}
+                src={collectionImage(c.slug, c.imageUrl, i)}
                 alt={c.name}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"

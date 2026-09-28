@@ -4,6 +4,7 @@ import { getShopProducts, getFilterFacets } from "@/lib/services/products";
 import { ShopFiltersDesktop, ShopFiltersMobile } from "@/components/store/shop-filters";
 import { ShopSort, ShopSearch, ShopPagination } from "@/components/store/shop-controls";
 import { ProductCard, type ProductCardData } from "@/components/product/product-card";
+import { resolveImage, realImage } from "@/lib/media";
 
 export const metadata: Metadata = {
   title: "Shop",
@@ -17,8 +18,8 @@ function toCardData(product: Awaited<ReturnType<typeof getShopProducts>>["items"
     category: product.category?.name ?? "",
     price: Number(product.price),
     compareAtPrice: product.compareAtPrice ? Number(product.compareAtPrice) : null,
-    imageUrl: product.images[0]?.url ?? "/placeholder-fabric.jpg",
-    hoverImageUrl: product.images[1]?.url,
+    imageUrl: resolveImage(product.images[0]?.url),
+    hoverImageUrl: realImage(product.images[1]?.url),
     colors: product.colors.map((pc) => ({ name: pc.color.name, hex: pc.color.hex })),
     inStock: (product.inventory?.stockMeters ?? 0) > 0,
   };

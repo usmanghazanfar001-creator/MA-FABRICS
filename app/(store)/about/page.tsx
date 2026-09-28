@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { IMAGES } from "@/lib/media";
 
 export const metadata: Metadata = {
   title: "About",
@@ -13,7 +14,7 @@ export default function AboutPage() {
 
       <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
         <div className="relative aspect-[4/5] overflow-hidden">
-          <Image src="/placeholder-about.jpg" alt="MA Fabrics workshop" fill className="object-cover" sizes="(min-width: 1024px) 50vw, 100vw" />
+          <Image src={IMAGES.boutique} alt="MA Fabrics workshop" fill className="object-cover" sizes="(min-width: 1024px) 50vw, 100vw" />
         </div>
         <div className="space-y-5 text-sm leading-relaxed text-navy/70 sm:text-base">
           <p>
