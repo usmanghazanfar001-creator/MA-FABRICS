@@ -102,6 +102,7 @@ async function main() {
     isNewArrival?: boolean;
     stock: number;
     imageUrl?: string;
+    imageUrl2?: string;
   }[] = [
     {
       name: "MA Hawal Suiting",
@@ -118,9 +119,8 @@ async function main() {
       recommendedUse: "Suits / Shalwar Kameez / Waistcoats",
       isFeatured: true,
       stock: 120,
-      // Product photo intentionally left as a placeholder — the Grace Fabrics
-      // flyer is promotional artwork, not product photography, so it isn't
-      // used as the image here. Swap /placeholder-fabric.jpg for real photos.
+      imageUrl: "/media/images/black-pinstripe-selvedge.jpg",
+      imageUrl2: "/media/images/charcoal-selvedge.jpg",
     },
     {
       name: "MA Nafees Cotton",
@@ -135,6 +135,8 @@ async function main() {
       recommendedUse: "Shalwar Kameez",
       isNewArrival: true,
       stock: 200,
+      imageUrl: "/media/images/printed-suit-set.jpg",
+      imageUrl2: "/media/images/colour-rack.jpg",
     },
     {
       name: "MA Sherwani Velvet",
@@ -149,11 +151,17 @@ async function main() {
       recommendedUse: "Sherwani / Waistcoats",
       isFeatured: true,
       stock: 60,
+      imageUrl: "/media/images/black-satin-drape.jpg",
+      imageUrl2: "/media/images/heritage-robe.jpg",
     },
   ];
 
   for (const p of products) {
-    const { stock, imageUrl, ...productFields } = p;
+    const { stock, imageUrl, imageUrl2, ...productFields } = p;
+    const productImages = [
+      { url: imageUrl ?? "/media/images/neutral-rack.jpg", alt: p.name, position: 0 },
+      ...(imageUrl2 ? [{ url: imageUrl2, alt: `${p.name} — detail`, position: 1 }] : []),
+    ];
     const product = await prisma.product.upsert({
       where: { slug: p.slug },
       update: {},
@@ -163,7 +171,7 @@ async function main() {
         categoryId: categories[0]!.id,
         collectionId: collections[0]!.id,
         images: {
-          create: [{ url: imageUrl ?? "/media/images/neutral-rack.jpg", alt: p.name, position: 0 }],
+          create: productImages,
         },
         colors: {
           // MA Hawal Suiting ships in all 10 colors per the flyer; others get a 6-color sample.

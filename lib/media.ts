@@ -13,6 +13,10 @@ export const IMAGES = {
   colourRack: "/media/images/colour-rack.jpg",
   beigeHangers: "/media/images/beige-hangers.jpg",
   boutique: "/media/images/boutique-interior.jpg",
+  printedSuitSet: "/media/images/printed-suit-set.jpg",
+  charcoalSelvedge: "/media/images/charcoal-selvedge.jpg",
+  blackPinstripeSelvedge: "/media/images/black-pinstripe-selvedge.jpg",
+  blackSatinDrape: "/media/images/black-satin-drape.jpg",
 } as const;
 
 export const FALLBACK_PRODUCT_IMAGE = IMAGES.neutralRack;
@@ -23,6 +27,10 @@ const IMAGE_POOL: string[] = [
   IMAGES.colourRack,
   IMAGES.printedCloseup,
   IMAGES.beigeHangers,
+  IMAGES.printedSuitSet,
+  IMAGES.charcoalSelvedge,
+  IMAGES.blackPinstripeSelvedge,
+  IMAGES.blackSatinDrape,
 ];
 
 export function pickImage(index: number): string {
@@ -45,20 +53,20 @@ export function realImage(url: string | null | undefined): string | undefined {
 }
 
 const COLLECTION_IMAGES: Record<string, string> = {
-  "premium-suiting": IMAGES.neutralRack,
+  "premium-suiting": IMAGES.blackPinstripeSelvedge,
   "summer-collection": IMAGES.colourRack,
   "winter-collection": IMAGES.heritageRobe,
-  "luxury-collection": IMAGES.printedCloseup,
-  unstitched: IMAGES.beigeHangers,
+  "luxury-collection": IMAGES.blackSatinDrape,
+  unstitched: IMAGES.printedSuitSet,
 };
 
 const CATEGORY_IMAGES: Record<string, string> = {
-  suiting: IMAGES.neutralRack,
-  unstitched: IMAGES.beigeHangers,
+  suiting: IMAGES.blackPinstripeSelvedge,
+  unstitched: IMAGES.printedSuitSet,
   summer: IMAGES.colourRack,
-  winter: IMAGES.heritageRobe,
+  winter: IMAGES.charcoalSelvedge,
   premium: IMAGES.printedCloseup,
-  luxury: IMAGES.heritageRobe,
+  luxury: IMAGES.blackSatinDrape,
 };
 
 export function collectionImage(slug: string, url: string | null | undefined, index = 0): string {
@@ -135,6 +143,22 @@ export const SHOWCASE_VIDEOS: VideoItem[] = [
     description: "Layers, prints and denim in motion.",
     url: "/media/videos/styled-for-the-season.mp4",
     thumbnailUrl: "/media/posters/styled-for-the-season.jpg",
+    orientation: "portrait",
+  },
+  {
+    id: "showcase-fabric-wall-browse",
+    title: "Walking the fabric wall",
+    description: "Shelf after shelf of suiting, ready to choose from.",
+    url: "/media/videos/fabric-wall-browse.mp4",
+    thumbnailUrl: "/media/posters/fabric-wall-browse.jpg",
+    orientation: "portrait",
+  },
+  {
+    id: "showcase-shade-by-shade",
+    title: "Shade by shade",
+    description: "Every tone, folded and ready to compare.",
+    url: "/media/videos/shade-by-shade.mp4",
+    thumbnailUrl: "/media/posters/shade-by-shade.jpg",
     orientation: "portrait",
   },
 ];
