@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { PrismaClient, Season } from "@prisma/client";
+import { PrismaClient, Season, VideoType } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -22,10 +22,14 @@ async function main() {
   });
 
   // --- Site settings ---
+  // Note: these use `update` (not just `create`) so re-running the seed keeps
+  // them in sync with the values below. If you start editing settings for
+  // real via /admin/settings, remove the relevant `update` line here so a
+  // future reseed doesn't overwrite what you set in the admin panel.
   await prisma.siteSetting.upsert({
     where: { key: "whatsapp_number" },
-    update: {},
-    create: { key: "whatsapp_number", value: "+923001234567" }, // TEMP: from Grace Fabrics flyer — replace with the real business number
+    update: { value: "+923241175708" },
+    create: { key: "whatsapp_number", value: "+923241175708" },
   });
   await prisma.siteSetting.upsert({
     where: { key: "shop_address" },
@@ -103,6 +107,7 @@ async function main() {
     stock: number;
     imageUrl?: string;
     imageUrl2?: string;
+    videoFiles?: { title: string; url: string; thumbnailUrl: string }[];
   }[] = [
     {
       name: "MA Hawal Suiting",
@@ -153,11 +158,15 @@ async function main() {
       stock: 60,
       imageUrl: "/media/images/black-satin-drape.jpg",
       imageUrl2: "/media/images/heritage-robe.jpg",
+      videoFiles: [
+        { title: "MA Sherwani Velvet — Black", url: "/media/videos/sherwani-black.mp4", thumbnailUrl: "/media/posters/sherwani-black.jpg" },
+        { title: "MA Sherwani Velvet — Maroon", url: "/media/videos/sherwani-maroon.mp4", thumbnailUrl: "/media/posters/sherwani-maroon.jpg" },
+      ],
     },
   ];
 
   for (const p of products) {
-    const { stock, imageUrl, imageUrl2, ...productFields } = p;
+    const { stock, imageUrl, imageUrl2, videoFiles, ...productFields } = p;
     const productImages = [
       { url: imageUrl ?? "/media/images/neutral-rack.jpg", alt: p.name, position: 0 },
       ...(imageUrl2 ? [{ url: imageUrl2, alt: `${p.name} — detail`, position: 1 }] : []),
@@ -177,6 +186,18 @@ async function main() {
           // MA Hawal Suiting ships in all 10 colors per the flyer; others get a 6-color sample.
           create: (p.slug === "ma-hawal-suiting" ? colors : colors.slice(0, 6)).map((c) => ({ colorId: c.id })),
         },
+        ...(videoFiles && {
+          videos: {
+            create: videoFiles.map((v, i) => ({
+              title: v.title,
+              url: v.url,
+              thumbnailUrl: v.thumbnailUrl,
+              type: VideoType.PRODUCT_SHOWCASE,
+              isPublished: true,
+              position: i,
+            })),
+          },
+        }),
       },
     });
 

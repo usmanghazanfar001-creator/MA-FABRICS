@@ -21,7 +21,7 @@ function LoginForm() {
     try {
       const result = await loginUser({ email, password });
       if (result.success) {
-        router.push(searchParams.get("redirect") ?? "/account");
+        window.location.href = searchParams.get("redirect") ?? "/account";
       } else {
         setError(result.error ?? "Something went wrong.");
       }

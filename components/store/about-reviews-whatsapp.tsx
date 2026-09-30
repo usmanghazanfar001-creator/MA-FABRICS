@@ -57,20 +57,29 @@ export function ReviewsSection() {
 export function WhatsAppCTA({ whatsappNumber }: { whatsappNumber: string }) {
   const digitsOnly = whatsappNumber.replace(/[^\d]/g, "");
   return (
-    <section className="section-navy px-6 py-16 text-center lg:px-10">
-      <div className="mx-auto max-w-lg">
-        <h2 className="font-display text-2xl sm:text-3xl">Need help choosing your fabric?</h2>
-        <p className="mt-3 text-sm text-cream/70">
-          Send us your requirements and we'll help you pick the right fabric, color and quantity.
-        </p>
-        <a
-          href={`https://wa.me/${digitsOnly}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-7 inline-block"
-        >
-          <Button variant="gold">Chat with MA on WhatsApp</Button>
-        </a>
+    <section className="section-navy px-6 py-16 lg:px-10 lg:py-20">
+      <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-2 lg:gap-16">
+        <div className="text-center lg:text-left">
+          <h2 className="font-display text-2xl sm:text-3xl">Need help choosing your fabric?</h2>
+          <p className="mt-3 text-sm text-cream/70">
+            Send us your requirements and we'll help you pick the right fabric, color and quantity.
+          </p>
+          <a
+            href={`https://wa.me/${digitsOnly}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-7 inline-block"
+          >
+            <Button variant="gold">Chat with MA on WhatsApp</Button>
+          </a>
+        </div>
+        <div className="grid grid-cols-3 gap-3">
+          {[IMAGES.swatchFanDeck, IMAGES.superiorBolts, IMAGES.italianWoolBundles].map((src) => (
+            <div key={src} className="relative aspect-[3/4] overflow-hidden">
+              <Image src={src} alt="" fill className="object-cover" sizes="200px" />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

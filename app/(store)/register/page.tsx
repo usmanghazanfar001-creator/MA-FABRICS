@@ -19,7 +19,7 @@ export default function RegisterPage() {
     try {
       const result = await registerCustomer(form);
       if (result.success) {
-        router.push("/account");
+        window.location.href = "/account";
       } else {
         setError(result.error ?? "Something went wrong.");
       }

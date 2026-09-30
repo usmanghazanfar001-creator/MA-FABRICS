@@ -1,20 +1,48 @@
 import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/db/prisma";
+import { IMAGES } from "@/lib/media";
+
+interface BannerContent {
+  id: string;
+  title: string;
+  subtitle: string | null;
+  imageUrl: string;
+  linkUrl: string | null;
+}
+
+const DEFAULT_BANNERS: BannerContent[] = [
+  {
+    id: "default-suiting",
+    title: "Premium Suiting",
+    subtitle: "Italian-inspired weaves, cut to order",
+    imageUrl: IMAGES.stripedBundle,
+    linkUrl: "/shop?category=suiting",
+  },
+  {
+    id: "default-luxury",
+    title: "Luxury Collection",
+    subtitle: "Embroidered pieces for formal occasions",
+    imageUrl: IMAGES.embroideredSuitSet,
+    linkUrl: "/collections/luxury-collection",
+  },
+];
 
 export async function PromoBanners() {
   const now = new Date();
-  const banners = await prisma.banner.findMany({
-    where: {
-      isActive: true,
-      OR: [{ startsAt: null }, { startsAt: { lte: now } }],
-      AND: [{ OR: [{ endsAt: null }, { endsAt: { gte: now } }] }],
-    },
-    orderBy: { position: "asc" },
-    take: 2,
-  });
+  const dbBanners = await prisma.banner
+    .findMany({
+      where: {
+        isActive: true,
+        OR: [{ startsAt: null }, { startsAt: { lte: now } }],
+        AND: [{ OR: [{ endsAt: null }, { endsAt: { gte: now } }] }],
+      },
+      orderBy: { position: "asc" },
+      take: 2,
+    })
+    .catch(() => []);
 
-  if (banners.length === 0) return null;
+  const banners: BannerContent[] = dbBanners.length > 0 ? dbBanners : DEFAULT_BANNERS;
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-4 lg:px-10">

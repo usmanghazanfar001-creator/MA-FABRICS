@@ -20,7 +20,7 @@ function AdminLoginForm() {
     try {
       const result = await loginUser({ email, password });
       if (result.success) {
-        router.push(searchParams.get("redirect") ?? "/admin/dashboard");
+        window.location.href = searchParams.get("redirect") ?? "/admin/dashboard";
       } else {
         setError(result.error ?? "Something went wrong.");
       }

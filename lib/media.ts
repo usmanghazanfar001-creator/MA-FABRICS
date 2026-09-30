@@ -17,6 +17,12 @@ export const IMAGES = {
   charcoalSelvedge: "/media/images/charcoal-selvedge.jpg",
   blackPinstripeSelvedge: "/media/images/black-pinstripe-selvedge.jpg",
   blackSatinDrape: "/media/images/black-satin-drape.jpg",
+  swatchFanDeck: "/media/images/swatch-fan-deck.jpg",
+  stripedBundle: "/media/images/striped-bundle.jpg",
+  superiorBolts: "/media/images/superior-bolts.jpg",
+  italianWoolBundles: "/media/images/italian-wool-bundles.jpg",
+  woolSelvedgeCloseup: "/media/images/wool-selvedge-closeup.jpg",
+  embroideredSuitSet: "/media/images/embroidered-suit-set.jpg",
 } as const;
 
 export const FALLBACK_PRODUCT_IMAGE = IMAGES.neutralRack;
@@ -31,6 +37,12 @@ const IMAGE_POOL: string[] = [
   IMAGES.charcoalSelvedge,
   IMAGES.blackPinstripeSelvedge,
   IMAGES.blackSatinDrape,
+  IMAGES.swatchFanDeck,
+  IMAGES.stripedBundle,
+  IMAGES.superiorBolts,
+  IMAGES.italianWoolBundles,
+  IMAGES.woolSelvedgeCloseup,
+  IMAGES.embroideredSuitSet,
 ];
 
 export function pickImage(index: number): string {
@@ -53,10 +65,10 @@ export function realImage(url: string | null | undefined): string | undefined {
 }
 
 const COLLECTION_IMAGES: Record<string, string> = {
-  "premium-suiting": IMAGES.blackPinstripeSelvedge,
+  "premium-suiting": IMAGES.superiorBolts,
   "summer-collection": IMAGES.colourRack,
-  "winter-collection": IMAGES.heritageRobe,
-  "luxury-collection": IMAGES.blackSatinDrape,
+  "winter-collection": IMAGES.italianWoolBundles,
+  "luxury-collection": IMAGES.embroideredSuitSet,
   unstitched: IMAGES.printedSuitSet,
 };
 
@@ -64,9 +76,9 @@ const CATEGORY_IMAGES: Record<string, string> = {
   suiting: IMAGES.blackPinstripeSelvedge,
   unstitched: IMAGES.printedSuitSet,
   summer: IMAGES.colourRack,
-  winter: IMAGES.charcoalSelvedge,
-  premium: IMAGES.printedCloseup,
-  luxury: IMAGES.blackSatinDrape,
+  winter: IMAGES.woolSelvedgeCloseup,
+  premium: IMAGES.italianWoolBundles,
+  luxury: IMAGES.embroideredSuitSet,
 };
 
 export function collectionImage(slug: string, url: string | null | undefined, index = 0): string {
