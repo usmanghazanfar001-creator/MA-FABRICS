@@ -45,7 +45,7 @@ export async function PromoBanners() {
   const banners: BannerContent[] = dbBanners.length > 0 ? dbBanners : DEFAULT_BANNERS;
 
   return (
-    <section className="mx-auto max-w-7xl px-6 py-4 lg:px-10">
+    <section className="mx-auto max-w-7xl px-6 py-12 lg:px-10 lg:py-16">
       <div className="grid gap-6 sm:grid-cols-2">
         {banners.map((b) => {
           const content = (

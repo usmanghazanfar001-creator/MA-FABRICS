@@ -171,35 +171,53 @@ async function main() {
       { url: imageUrl ?? "/media/images/neutral-rack.jpg", alt: p.name, position: 0 },
       ...(imageUrl2 ? [{ url: imageUrl2, alt: `${p.name} — detail`, position: 1 }] : []),
     ];
+    const productColorIds = (p.slug === "ma-hawal-suiting" ? colors : colors.slice(0, 6)).map((c) => c.id);
+
     const product = await prisma.product.upsert({
       where: { slug: p.slug },
-      update: {},
+      // On a re-run (product already exists), sync its core fields so edits to
+      // this file actually reach the database — an empty `update: {}` here
+      // would silently do nothing, which is exactly what happened before this
+      // fix: later image/description changes never applied after the first seed.
+      update: {
+        ...productFields,
+        categoryId: categories[0]!.id,
+        collectionId: collections[0]!.id,
+      },
       create: {
         ...productFields,
         isPublished: true,
         categoryId: categories[0]!.id,
         collectionId: collections[0]!.id,
-        images: {
-          create: productImages,
-        },
-        colors: {
-          // MA Hawal Suiting ships in all 10 colors per the flyer; others get a 6-color sample.
-          create: (p.slug === "ma-hawal-suiting" ? colors : colors.slice(0, 6)).map((c) => ({ colorId: c.id })),
-        },
-        ...(videoFiles && {
-          videos: {
-            create: videoFiles.map((v, i) => ({
-              title: v.title,
-              url: v.url,
-              thumbnailUrl: v.thumbnailUrl,
-              type: VideoType.PRODUCT_SHOWCASE,
-              isPublished: true,
-              position: i,
-            })),
-          },
-        }),
       },
     });
+
+    // Images, colors, and videos are relations — upsert's nested `create` only
+    // fires on first insert, so replace them explicitly every run to stay in sync.
+    await prisma.productImage.deleteMany({ where: { productId: product.id } });
+    await prisma.productImage.createMany({
+      data: productImages.map((img) => ({ ...img, productId: product.id })),
+    });
+
+    await prisma.productColor.deleteMany({ where: { productId: product.id } });
+    await prisma.productColor.createMany({
+      data: productColorIds.map((colorId) => ({ productId: product.id, colorId })),
+    });
+
+    if (videoFiles) {
+      await prisma.productVideo.deleteMany({ where: { productId: product.id } });
+      await prisma.productVideo.createMany({
+        data: videoFiles.map((v, i) => ({
+          productId: product.id,
+          title: v.title,
+          url: v.url,
+          thumbnailUrl: v.thumbnailUrl,
+          type: VideoType.PRODUCT_SHOWCASE,
+          isPublished: true,
+          position: i,
+        })),
+      });
+    }
 
     await prisma.inventory.upsert({
       where: { productId: product.id },

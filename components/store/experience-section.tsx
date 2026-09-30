@@ -1,3 +1,5 @@
+import { SectionHeading } from "@/components/store/section-heading";
+
 const FEATURES = [
   {
     title: "Premium quality",
@@ -21,10 +23,10 @@ export function ExperienceSection() {
   return (
     <section className="section-navy px-6 py-20 lg:px-10 lg:py-28">
       <div className="mx-auto max-w-7xl">
-        <h2 className="mb-14 font-display text-3xl sm:text-4xl">The MA Fabrics experience</h2>
+        <SectionHeading eyebrow="Why MA Fabrics" title="The MA Fabrics experience" tone="light" />
         <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
           {FEATURES.map((f) => (
-            <div key={f.title} className="border-t border-gold/40 pt-6">
+            <div key={f.title} className="border-t-2 border-gold pt-6">
               <h3 className="mb-2 font-display text-xl">{f.title}</h3>
               <p className="text-sm text-cream/70">{f.body}</p>
             </div>

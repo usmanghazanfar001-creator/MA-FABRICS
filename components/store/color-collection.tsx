@@ -1,3 +1,5 @@
+import { SectionHeading } from "@/components/store/section-heading";
+
 const COLORS = [
   { name: "Black", hex: "#111111" },
   { name: "Charcoal", hex: "#30343B" },
@@ -14,12 +16,11 @@ const COLORS = [
 export function ColorCollection() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-      <div className="mb-12 max-w-lg">
-        <h2 className="font-display text-3xl text-navy sm:text-4xl">A shade for every occasion</h2>
-        <p className="mt-3 text-sm text-navy/60">
-          Every fabric is available across our full color range — from deep formal tones to warm, everyday neutrals.
-        </p>
-      </div>
+      <SectionHeading
+        eyebrow="Palette"
+        title="A shade for every occasion"
+        subtitle="Every fabric is available across our full color range — from deep formal tones to warm, everyday neutrals."
+      />
       <div className="flex flex-wrap gap-x-8 gap-y-6">
         {COLORS.map((c) => (
           <div key={c.name} className="flex flex-col items-center gap-2">

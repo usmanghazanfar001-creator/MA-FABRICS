@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db/prisma";
 import { ProductCard, type ProductCardData } from "@/components/product/product-card";
 import { resolveImage, realImage } from "@/lib/media";
+import { SectionHeading } from "@/components/store/section-heading";
 
 export async function FeaturedProducts() {
   const products = await prisma.product.findMany({
@@ -27,9 +28,7 @@ export async function FeaturedProducts() {
   return (
     <section className="bg-cream px-6 py-20 lg:px-10 lg:py-28">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 flex items-end justify-between">
-          <h2 className="font-display text-3xl text-navy sm:text-4xl">Featured fabrics</h2>
-        </div>
+<SectionHeading eyebrow="Best sellers" title="Featured fabrics" />
         <div className="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4">
           {cards.map((p) => (
             <ProductCard key={p.slug} product={p} />

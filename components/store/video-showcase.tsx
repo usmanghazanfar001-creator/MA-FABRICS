@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/db/prisma";
 import { mergeVideos } from "@/lib/media";
 import { VideoRail } from "@/components/store/video-rail";
+import { SectionHeading } from "@/components/store/section-heading";
 
 export async function VideoShowcase() {
   // Admin-published videos come first; the built-in films fill the rest.
@@ -17,14 +18,18 @@ export async function VideoShowcase() {
   const videos = mergeVideos(dbVideos).slice(0, 6);
 
   return (
-    <section className="bg-cream px-6 py-20 lg:px-10 lg:py-28">
+    <section className="section-navy px-6 py-20 lg:px-10 lg:py-28">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-10 flex items-end justify-between">
-          <h2 className="font-display text-3xl text-navy sm:text-4xl">In motion</h2>
-          <Link href="/videos" className="text-sm text-navy/70 hover:text-gold-dark">
-            View all videos
-          </Link>
-        </div>
+        <SectionHeading
+          eyebrow="Watch"
+          title="In motion"
+          tone="light"
+          action={
+            <Link href="/videos" className="text-sm text-cream/70 hover:text-gold">
+              View all videos
+            </Link>
+          }
+        />
         <VideoRail videos={videos} />
       </div>
     </section>
