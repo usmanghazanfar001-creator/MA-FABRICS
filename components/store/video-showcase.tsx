@@ -10,12 +10,12 @@ export async function VideoShowcase() {
     .findMany({
       where: { isPublished: true },
       orderBy: { position: "asc" },
-      take: 6,
+      take: 8,
       include: { product: { select: { slug: true, name: true } } },
     })
     .catch(() => []);
 
-  const videos = mergeVideos(dbVideos).slice(0, 6);
+  const videos = mergeVideos(dbVideos).slice(0, 9);
 
   return (
     <section className="section-navy px-6 py-20 lg:px-10 lg:py-28">

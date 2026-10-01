@@ -107,6 +107,7 @@ async function main() {
     stock: number;
     imageUrl?: string;
     imageUrl2?: string;
+    imageUrl3?: string;
     videoFiles?: { title: string; url: string; thumbnailUrl: string }[];
   }[] = [
     {
@@ -126,6 +127,7 @@ async function main() {
       stock: 120,
       imageUrl: "/media/images/black-pinstripe-selvedge.jpg",
       imageUrl2: "/media/images/charcoal-selvedge.jpg",
+      imageUrl3: "/media/images/hawal-suiting-wall-display.jpg",
     },
     {
       name: "MA Nafees Cotton",
@@ -166,10 +168,11 @@ async function main() {
   ];
 
   for (const p of products) {
-    const { stock, imageUrl, imageUrl2, videoFiles, ...productFields } = p;
+    const { stock, imageUrl, imageUrl2, imageUrl3, videoFiles, ...productFields } = p;
     const productImages = [
       { url: imageUrl ?? "/media/images/neutral-rack.jpg", alt: p.name, position: 0 },
       ...(imageUrl2 ? [{ url: imageUrl2, alt: `${p.name} — detail`, position: 1 }] : []),
+      ...(imageUrl3 ? [{ url: imageUrl3, alt: `${p.name} — in store`, position: 2 }] : []),
     ];
     const productColorIds = (p.slug === "ma-hawal-suiting" ? colors : colors.slice(0, 6)).map((c) => c.id);
 
