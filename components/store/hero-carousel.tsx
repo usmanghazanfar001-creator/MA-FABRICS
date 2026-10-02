@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HERO_VIDEOS } from "@/lib/media";
 
@@ -123,33 +122,6 @@ export function HeroCarousel({ heading, text }: { heading?: string; text?: strin
             </div>
           </motion.div>
         </AnimatePresence>
-
-        <div className="mt-10 flex items-center gap-4">
-          <button
-            aria-label="Previous slide"
-            onClick={prev}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-cream/30 text-cream hover:border-gold hover:text-gold"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          <div className="flex gap-2">
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                aria-label={`Go to slide ${i + 1}`}
-                onClick={() => setIndex(i)}
-                className={`h-1.5 rounded-full transition-all ${i === index ? "w-8 bg-gold" : "w-1.5 bg-cream/40"}`}
-              />
-            ))}
-          </div>
-          <button
-            aria-label="Next slide"
-            onClick={next}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-cream/30 text-cream hover:border-gold hover:text-gold"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>
       </div>
     </section>
   );
