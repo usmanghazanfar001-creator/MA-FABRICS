@@ -74,7 +74,11 @@ export async function loginUser(input: unknown): Promise<AuthResult> {
     return { success: true };
   } catch (err) {
     console.error("loginUser failed:", err);
-    return { success: false, error: "Something went wrong. Please try again in a moment." };
+    // TEMP DEBUG: showing the real error on-screen while we track down a
+    // production-only login failure. Revert to the generic message below
+    // once this is resolved — never ship raw error details long-term.
+    const detail = err instanceof Error ? err.message : String(err);
+    return { success: false, error: `Something went wrong: ${detail}` };
   }
 }
 
