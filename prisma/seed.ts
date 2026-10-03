@@ -12,7 +12,19 @@ async function main() {
 
   await prisma.user.upsert({
     where: { email: adminEmail },
-    update: {},
+    // Same bug class as the products/settings fix: an empty update: {} here
+    // meant that if this email ever got created as a regular CUSTOMER first
+    // (e.g. by signing up through the public /register page before ever
+    // running this seed), every later seed run would leave it as CUSTOMER
+    // forever — login would succeed, but middleware would correctly reject
+    // it as not-an-admin and silently bounce back to the login page with no
+    // visible error. Forcing role/password/name here on every run fixes that.
+    update: {
+      passwordHash,
+      role: "ADMIN",
+      name: "MA Fabrics Admin",
+      isActive: true,
+    },
     create: {
       email: adminEmail,
       passwordHash,
