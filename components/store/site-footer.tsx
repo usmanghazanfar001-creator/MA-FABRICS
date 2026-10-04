@@ -21,6 +21,7 @@ export async function SiteFooter() {
             <ul className="space-y-2 text-sm text-cream/70">
               <li><Link href="/shop">All fabrics</Link></li>
               <li><Link href="/collections">Collections</Link></li>
+              <li><Link href="/gallery">Gallery</Link></li>
               <li><Link href="/videos">Fabric videos</Link></li>
               <li><Link href="/track-order">Track your order</Link></li>
             </ul>

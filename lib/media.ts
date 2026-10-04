@@ -180,7 +180,15 @@ export const SHOWCASE_VIDEOS: VideoItem[] = [
  * showcase films. Legacy placeholder videos left over from early seed data are dropped.
  */
 export function mergeVideos(
-  dbVideos: { id: string; title: string; description: string | null; url: string; thumbnailUrl: string | null; product?: { slug: string; name: string } | null }[]
+  dbVideos: {
+    id: string;
+    title: string;
+    description: string | null;
+    url: string;
+    thumbnailUrl: string | null;
+    orientation: "LANDSCAPE" | "PORTRAIT";
+    product?: { slug: string; name: string } | null;
+  }[]
 ): VideoItem[] {
   const real: VideoItem[] = dbVideos
     .filter((v) => !isPlaceholderUrl(v.url))
@@ -190,9 +198,41 @@ export function mergeVideos(
       description: v.description ?? undefined,
       url: v.url,
       thumbnailUrl: v.thumbnailUrl,
-      orientation: "landscape" as const,
+      orientation: v.orientation === "PORTRAIT" ? ("portrait" as const) : ("landscape" as const),
       productSlug: v.product?.slug,
       productName: v.product?.name,
     }));
   return [...real, ...SHOWCASE_VIDEOS];
+}
+
+// ---------- Gallery photos ----------
+
+export interface PhotoItem {
+  id: string;
+  title: string;
+  caption?: string;
+  url: string;
+}
+
+/** Built-in gallery shown only until the admin publishes at least one photo. */
+export const SHOWCASE_PHOTOS: PhotoItem[] = [
+  { id: "showcase-boutique", title: "Inside the boutique", url: IMAGES.boutique },
+  { id: "showcase-superior-bolts", title: "Superior suiting bolts", url: IMAGES.superiorBolts },
+  { id: "showcase-swatch-fan", title: "Swatch fan deck", url: IMAGES.swatchFanDeck },
+  { id: "showcase-colour-rack", title: "The colour rack", url: IMAGES.colourRack },
+  { id: "showcase-italian-wool", title: "Italian wool bundles", url: IMAGES.italianWoolBundles },
+  { id: "showcase-embroidered", title: "Embroidered suit set", url: IMAGES.embroideredSuitSet },
+  { id: "showcase-pinstripe", title: "Black pinstripe selvedge", url: IMAGES.blackPinstripeSelvedge },
+  { id: "showcase-satin", title: "Black satin drape", url: IMAGES.blackSatinDrape },
+  { id: "showcase-printed", title: "Printed suit set", url: IMAGES.printedSuitSet },
+];
+
+/** Admin-published photos win outright; the built-in set only fills an empty gallery. */
+export function mergePhotos(
+  dbPhotos: { id: string; title: string; caption: string | null; url: string }[]
+): PhotoItem[] {
+  const real: PhotoItem[] = dbPhotos
+    .filter((p) => !isPlaceholderUrl(p.url))
+    .map((p) => ({ id: p.id, title: p.title, caption: p.caption ?? undefined, url: p.url }));
+  return real.length > 0 ? real : SHOWCASE_PHOTOS;
 }

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {
   LayoutDashboard, Package, FolderTree, Palette, Video, ShoppingCart,
-  Users, Star, Image as ImageIcon, Tag, Settings, Layers,
+  Users, Star, Image as ImageIcon, Images, Tag, Settings, Layers,
 } from "lucide-react";
 
 const NAV = [
@@ -10,6 +10,7 @@ const NAV = [
   { href: "/admin/categories", label: "Categories", icon: FolderTree },
   { href: "/admin/collections", label: "Collections", icon: Layers },
   { href: "/admin/colors", label: "Colors", icon: Palette },
+  { href: "/admin/photos", label: "Photos", icon: Images },
   { href: "/admin/videos", label: "Videos", icon: Video },
   { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
   { href: "/admin/customers", label: "Customers", icon: Users },

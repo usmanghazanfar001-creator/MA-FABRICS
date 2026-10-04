@@ -10,7 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    "", "/shop", "/collections", "/videos", "/about", "/contact", "/track-order",
+    "", "/shop", "/collections", "/gallery", "/videos", "/about", "/contact", "/track-order",
   ].map((path) => ({ url: `${SITE_URL}${path}`, changeFrequency: "weekly", priority: path === "" ? 1 : 0.7 }));
 
   const productRoutes: MetadataRoute.Sitemap = products.map((p) => ({

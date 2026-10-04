@@ -188,6 +188,11 @@ enum VideoType {
   PROMOTIONAL
 }
 
+enum MediaOrientation {
+  LANDSCAPE
+  PORTRAIT
+}
+
 model ProductVideo {
   id           String    @id @default(cuid())
   productId    String?
@@ -197,11 +202,26 @@ model ProductVideo {
   url          String
   thumbnailUrl String?
   type         VideoType @default(PRODUCT_SHOWCASE)
+  orientation  MediaOrientation @default(LANDSCAPE)
   isPublished  Boolean   @default(false)
   position     Int       @default(0)
   createdAt    DateTime  @default(now())
 
   @@index([productId])
+  @@index([isPublished, position])
+}
+
+/// Site-wide gallery photo (shown on /gallery). Product photos live on ProductImage.
+model GalleryPhoto {
+  id          String   @id @default(cuid())
+  title       String
+  caption     String?
+  url         String
+  isPublished Boolean  @default(false)
+  position    Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([isPublished, position])
 }
 
 model Inventory {
