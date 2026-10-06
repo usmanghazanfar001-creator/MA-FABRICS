@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { Upload, X, GripVertical } from "lucide-react";
+import { uploadDirect } from "@/components/admin/direct-upload";
 
 interface ImageUploaderProps {
   value: string[];
@@ -22,14 +23,8 @@ export function ImageUploader({ value, onChange, folder = "products" }: ImageUpl
     const uploaded: string[] = [];
 
     for (const file of Array.from(files)) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("folder", folder);
       try {
-        const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error ?? "Upload failed");
-        uploaded.push(data.url);
+        uploaded.push(await uploadDirect(file, "photos"));
       } catch (err) {
         setError(err instanceof Error ? err.message : "Upload failed");
       }

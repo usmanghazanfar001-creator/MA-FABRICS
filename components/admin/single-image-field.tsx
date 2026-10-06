@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { Upload, X } from "lucide-react";
+import { uploadDirect } from "@/components/admin/direct-upload";
 
 interface SingleImageFieldProps {
   name: string;
@@ -20,14 +21,8 @@ export function SingleImageField({ name, label, defaultValue = "", folder = "cat
   async function upload(file: File) {
     setUploading(true);
     setError(null);
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("folder", folder);
     try {
-      const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Upload failed");
-      setUrl(data.url);
+      setUrl(await uploadDirect(file, "photos"));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed");
     }
