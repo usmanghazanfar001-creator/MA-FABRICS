@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
-const COOKIE_NAME = process.env.SESSION_COOKIE_NAME ?? "ma_session";
+const COOKIE_NAME = process.env.SESSION_COOKIE_NAME || "ma_session";
 
 function getSecret() {
   return new TextEncoder().encode(process.env.AUTH_SECRET ?? "");
